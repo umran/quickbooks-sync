@@ -1,5 +1,4 @@
 const QuickBooks = require("node-quickbooks")
-const config = require("./quickbooks_config")
 
 class QuickBooksEngine {
     constructor({ client_id, client_secret, auth_token, realm_id, refresh_token, sandbox = true, debug = true }) {
@@ -15,6 +14,7 @@ class QuickBooksEngine {
             '2.0', //oAuth version
             refresh_token
         )
+        this.accounts = {}
     }
 
     refreshAccessToken() {
@@ -71,6 +71,21 @@ class QuickBooksEngine {
                 }
 
                 resolve(item)
+            })
+        })
+    }
+
+    findAccountByName(name) {
+        return new Promise((resolve, reject) => {
+            this.client.findAccounts({
+                Name: name
+            }, (err, res) => {
+                if (err) {
+                    reject(err)
+                    return
+                } 
+                
+                resolve(res.QueryResponse && res.QueryResponse.Account && res.QueryResponse.Account.length > 0 ? res.QueryResponse.Account[0] : null)
             })
         })
     }
@@ -132,6 +147,36 @@ class QuickBooksEngine {
         return category
     }
 
+    async resolveAccountRefs() {
+        const results = await Promise.all([this.findAccountByName("Sales of Product Income"), this.findAccountByName("Cost of Goods Sold"), this.findAccountByName("Inventory Asset")])
+        const refs = results.reduce((accounts, r) => {
+            if (r.Name == "Sales of Product Income") {
+                accounts = {
+                    ...accounts,
+                    income_account_ref: { value: r.Id, name: r.Name }
+                }
+            }
+
+            if (r.Name == "Cost of Goods Sold") {
+                accounts = {
+                    ...accounts,
+                    expense_account_ref: { value: r.Id, name: r.Name }
+                }
+            }
+
+            if (r.Name == "Inventory Asset") {
+                accounts = {
+                    ...accounts,
+                    asset_account_ref: { value: r.Id, name: r.Name }
+                }
+            }
+
+            return accounts
+        }, {})
+
+        return refs
+    }
+
     async syncProduct(product) {
         const latest_category = product.category ? await this.findOrCreateCategoryByName(product.category) : null
         
@@ -187,15 +232,16 @@ class QuickBooksEngine {
         }
 
         // create product
+        const accounts = await this.resolveAccountRefs()
         await this.createProduct({
             ...latest_product,
             Active: true,
             TrackQtyOnHand: true,
             QtyOnHand: 0,
             InvStartDate: new Date().toISOString().slice(0, 10),
-            IncomeAccountRef: config.products.income_account_ref,
-            ExpenseAccountRef: config.products.expense_account_ref,
-            AssetAccountRef: config.products.asset_account_ref
+            IncomeAccountRef: accounts.products.income_account_ref,
+            ExpenseAccountRef: accounts.products.expense_account_ref,
+            AssetAccountRef: accounts.products.asset_account_ref
         })
     }
 }
