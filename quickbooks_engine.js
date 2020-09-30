@@ -25,6 +25,10 @@ class QuickBooksEngine {
                     return
                 }
 
+                if (!res.access_token || !res.refresh_token) {
+                    reject(new Error("missing auth data"))
+                }
+
                 resolve()
             })
         })
