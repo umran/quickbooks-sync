@@ -239,9 +239,9 @@ class QuickBooksEngine {
             TrackQtyOnHand: true,
             QtyOnHand: 0,
             InvStartDate: new Date().toISOString().slice(0, 10),
-            IncomeAccountRef: accounts.products.income_account_ref,
-            ExpenseAccountRef: accounts.products.expense_account_ref,
-            AssetAccountRef: accounts.products.asset_account_ref
+            IncomeAccountRef: accounts.income_account_ref,
+            ExpenseAccountRef: accounts.expense_account_ref,
+            AssetAccountRef: accounts.asset_account_ref
         })
     }
 }
