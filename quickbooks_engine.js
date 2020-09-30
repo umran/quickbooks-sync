@@ -1,11 +1,11 @@
 const QuickBooks = require("node-quickbooks")
 
 class QuickBooksEngine {
-    constructor({ client_id, client_secret, auth_token, realm_id, refresh_token, sandbox = true, debug = true }) {
+    constructor({ client_id, client_secret, access_token, realm_id, refresh_token, sandbox = true, debug = true }) {
         this.client = new QuickBooks(
             client_id,
             client_secret,
-            auth_token,
+            access_token,
             false, // no token secret for oAuth 2.0
             realm_id,
             sandbox, // use the sandbox?
