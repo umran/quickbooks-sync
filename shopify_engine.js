@@ -199,26 +199,26 @@ const validateProductVariants = variants => {
 
 const logProductVariantValidationResults = ({ ok, results }) => {
     results.forEach(({ id, product_id, title, errors }) => {
-        console.log(`   ${chalk.gray.bold(`[${id}]`)}`)
-        console.log(`       ${chalk.gray("product id:")} ${chalk.blueBright.bold(product_id)}`)
-        console.log(`       ${chalk.gray("product name:")} ${chalk.blueBright.bold(title)}`)
+        console.log(`    ${chalk.gray.bold(`[${id}]`)}`)
+        console.log(`        ${chalk.gray("product id:")} ${chalk.blueBright.bold(product_id)}`)
+        console.log(`        ${chalk.gray("product name:")} ${chalk.blueBright.bold(title)}`)
         if (errors.length > 0) {
-            console.log(`       ${chalk.gray("status:")} ${chalk.red.bold("FAILED")}`)
-            console.log(`       ${chalk.gray("errors:")}`)
+            console.log(`        ${chalk.gray("status:")} ${chalk.red.bold("FAILED")}`)
+            console.log(`        ${chalk.gray("errors:")}`)
             errors.forEach(({ code, message }) => {
-                console.log(`           ${chalk.red.bold(code)} ${chalk.red(message)}`)
+                console.log(`            ${chalk.red.bold(code)} ${chalk.red(message)}`)
             })
         } else {
-            console.log(`       ${chalk.gray("status:")} ${chalk.green.bold("PASSED")}`)
+            console.log(`        ${chalk.gray("status:")} ${chalk.green.bold("PASSED")}`)
         }
 
         console.log("\n")
     })
 
     if (ok) {
-        console.log(`   ${chalk.green.bold("all variants passed validation")}`)
+        console.log(`    ${chalk.green.bold("all variants passed validation")}`)
     } else {
-        console.log(`   ${chalk.red.bold("some variants did not pass validation")}`)
+        console.log(`    ${chalk.red.bold("some variants did not pass validation")}`)
     }
 
     console.log("\n")
