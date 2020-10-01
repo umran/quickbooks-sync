@@ -1,6 +1,6 @@
 {
   "name": "quickbooks-sync",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "quickbooks integration with shopify",
   "main": "index.js",
   "scripts": {
