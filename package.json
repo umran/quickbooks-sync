@@ -27,6 +27,7 @@
     "graphql": "^15.3.0",
     "graphql-tag": "^2.11.0",
     "isomorphic-unfetch": "^3.0.0",
+    "moment": "^2.29.0",
     "node-quickbooks": "^2.0.35"
   }
 }

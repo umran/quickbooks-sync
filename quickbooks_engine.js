@@ -1,4 +1,5 @@
 const QuickBooks = require("node-quickbooks")
+const moment = require("moment")
 
 class QuickBooksEngine {
     constructor({ client_id, client_secret, access_token, realm_id, refresh_token, sandbox = true, debug = true }) {
@@ -242,7 +243,7 @@ class QuickBooksEngine {
             Active: true,
             TrackQtyOnHand: true,
             QtyOnHand: 0,
-            InvStartDate: new Date().toISOString().slice(0, 10),
+            InvStartDate: moment(new Date()).toISOString(true).slice(0, 10),
             IncomeAccountRef: accounts.income_account_ref,
             ExpenseAccountRef: accounts.expense_account_ref,
             AssetAccountRef: accounts.asset_account_ref
